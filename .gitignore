@@ -134,3 +134,6 @@ node_modules/
 UI/node_modules/
 backend/venv/
 
+# drivers
+geckodriver
+/geckodriver

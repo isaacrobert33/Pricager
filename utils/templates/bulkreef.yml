@@ -1,0 +1,26 @@
+products:
+    css: 'ol[class="ais-Hits-list"]'
+    xpath: null
+    multiple: true
+    type: Text
+    children:
+        product_title:
+            css: 'li.ais-Hits-item:nth-of-type(1) h2.result-title'
+            xpath: null
+            type: Text
+        product_category:
+            css: 'div.product-brand'
+            xpath: null
+            type: Text
+        product_price:
+            css: 'span.price-wrapper'
+            xpath: null
+            type: Text
+        product_preview:
+            css: 'img'
+            xpath: null
+            type: Image
+        product_link:
+            css: 'h2.result-title a.result'
+            xpath: null
+            type: Link
