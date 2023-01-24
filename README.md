@@ -1,2 +1,3 @@
 # Price-Manager
-An online store price managing tool
+> _An online store price managing tool_
+
