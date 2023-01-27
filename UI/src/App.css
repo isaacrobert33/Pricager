@@ -168,8 +168,8 @@ body {
   padding: 4px;
   font-size: 12px;
   font-weight: bold;
-  /* margin-left: -60px; */
 }
+
 .products-list {
   display: flex;
   flex-wrap: wrap;
@@ -212,10 +212,80 @@ body {
   position: absolute;
   right: 30%;
   top: 45%;
-  /* border-radius: 50%;
-  border: 1px solid #002e25; */
+  
 }
 
 @media only screen and (max-width: 600px) {
+  .header .tabs {
+    margin-left: 0;
+    margin-top: 0;
+  }
+  .tabs a {
+    color: #002e25;
+  }
+  .product-info {
+    margin-left: 95px;
+  }
+  .product-info h2 {
+    font-size: 12px;
+    margin-top: -90px;
+  }
+  .product-preview {
+    width: 96px;
+    height: 96px;
+  }
+
+  .product-preview img {
+    width: 96px;
+    height: 96px;
+  }
+
+  .price-range {
+    margin-right: 6px;
+  }
+  .price-range b {
+    font-size: 12px;
+  }
+  .price-range span {
+    font-size: 12px;
+  }
+  .search-bar {
+    border-radius: 19px;
+    width: 70%;
+    height: 40px;
+    background-color: beige;
+    border: none;
+    outline: none;
+    padding: 0 8px;
+  }
+  .search-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    text-align: center;
+    margin-left: 4%;
+    margin-top: 20px;
+    width: 80%;
+  }
+  #sort {
+    right: 10%;
+    top: 66%;
+    border-radius: 50%;
+    border: 2px solid #002e25;
+    height: 30px;
+    width: 30px;
+  }
+  .special-tab {
+    margin-left: 5%;
+  }
+
+  .product-card {
+    margin: 30px 55px;
+  }
+  .tab h2 {
+    text-align: center;
+    margin-left: 18%;
+    position: absolute;
+    margin-top: -20px;
+  }
   
 }

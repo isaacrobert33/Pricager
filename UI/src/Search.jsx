@@ -105,6 +105,7 @@ const Search = () => {
     }
     return (
       <div className='search'>
+        <br></br>
         <img src={search} alt={"search"}></img>
         <br></br>
         <div>

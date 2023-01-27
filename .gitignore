@@ -138,3 +138,4 @@ backend/venv/
 geckodriver
 /geckodriver
 backend/dynamicsDB.json
+bulkreef_3.json

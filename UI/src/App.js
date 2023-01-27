@@ -22,7 +22,7 @@ function App() {
             <h2>Price manager</h2>
             <div className='tabs'>
               <Link id='search-tab' to={"/"} >Search</Link>
-              <Link id='products-tab' to={"/products"} >Dynamic Products & Price variants</Link>
+              <Link id='products-tab' to={"/products"} title={"Dynamic Products & Price variants"} >Dynamic Products</Link>
             </div>
           </div>
           <Routes>

@@ -2,7 +2,7 @@ import axios from "axios";
 import React, { useEffect } from "react";
 import { useState } from "react";
 
-var productFetched = false;
+// var productFetched = false;
 const HOST = "https://robertix.pythonanywhere.com";
 
 const ProductRow = ({title, price, img, ranges=[]}) => {
@@ -17,7 +17,7 @@ const ProductRow = ({title, price, img, ranges=[]}) => {
         <h2>{title}</h2>
         <span>{price}</span>
        
-        <p style={{fontWeight: "bold"}}>Price Ranges:</p>
+        <p style={{fontWeight: "bold", fontSize: "12px"}}>Price Ranges:</p>
         {
           ranges.map(
             (data) => (
@@ -25,9 +25,7 @@ const ProductRow = ({title, price, img, ranges=[]}) => {
             )
           )
         }
-        
       </div>
-      
     </div>
   )
 }
@@ -53,25 +51,26 @@ const DynamicProducts = () => {
         setPage(page - 1);
       }
       fetchProducts(page - 1);
+      window.scrollTo(0, 0);
     }
     const next = () => {
       setPage(page + 1);
       fetchProducts(page + 1);
+      window.scrollTo(0, 0);
     }
     
     useEffect((e) => {
       document.getElementById("search-tab").style.textDecoration = "none";
       document.getElementById("products-tab").style.textDecoration = "underline";
 
-      if (!productFetched) {
+      if (products.length<1) {
         fetchProducts(page);
-        productFetched = true;
       }
       
     })
     return (
       <div className='products'>
-        <h3>Dynamic Products</h3>
+        {/* <h3>Dynamic Products</h3> */}
         {
           products?.length > 0 ? (
             <div className="products-list">
