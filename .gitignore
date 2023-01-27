@@ -137,3 +137,4 @@ backend/venv/
 # drivers
 geckodriver
 /geckodriver
+backend/dynamicsDB.json

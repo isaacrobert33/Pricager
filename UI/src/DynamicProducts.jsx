@@ -3,6 +3,7 @@ import React, { useEffect } from "react";
 import { useState } from "react";
 
 var productFetched = false;
+const HOST = "http://robertix.pythonanywhere.com";
 
 const ProductRow = ({title, price, img, ranges=[]}) => {
   
@@ -42,7 +43,7 @@ const DynamicProducts = () => {
         pageVal = pageNo;
       }
 
-      let {data} = await axios.get(`http://127.0.0.1:5000/dynamic?limit=${30}&page=${pageVal}`);
+      let {data} = await axios.get(`${HOST}/dynamic?limit=${30}&page=${pageVal}`);
       setProducts(data.data);
     }
 

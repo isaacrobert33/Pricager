@@ -121,7 +121,7 @@ def search_bulkreef(queries, export=False):
         except KeyboardInterrupt:
             break
 
-    with open("bulkreef_2.json", "w") as f:
+    with open("bulkreef_3.json", "w") as f:
         json.dump(search_result, f, indent=4)
     f.close()
 
@@ -134,7 +134,7 @@ with open("backend/dynamics.csv", "r") as f:
     for row in r:
         queries.append(row[0].strip())
 
-print(f"Searching for {len(queries[336:])} products...")
-ret = search_bulkreef(queries=queries[336:], export=True)
+print(f"Searching for {len(queries[641:])} products...")
+ret = search_bulkreef(queries=queries[404:], export=True)
 # ret = search_2(queries=queries)
 print(ret)

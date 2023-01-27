@@ -1,5 +1,5 @@
 import './App.css';
-import React, { useEffect } from "react";
+import React from "react";
 import { ChakraProvider } from '@chakra-ui/react';
 import {
   BrowserRouter as Router,
@@ -21,12 +21,12 @@ function App() {
             <img width={"42px"} height={"42px"} src={favicon} alt={"logo"}></img>
             <h2>Price manager</h2>
             <div className='tabs'>
-              <Link id='search-tab' to={"/search"} >Search</Link>
+              <Link id='search-tab' to={"/"} >Search</Link>
               <Link id='products-tab' to={"/products"} >Dynamic Products & Price variants</Link>
             </div>
           </div>
           <Routes>
-            <Route exact path='/search' element={<Search />}></Route>
+            <Route exact path='/' element={<Search />}></Route>
             <Route exact path='/products' element={<DynamicProducts />}></Route>
           </Routes>
         </div>

@@ -3,14 +3,15 @@ import { useState } from "react";
 import axios from "axios";
 import search from "./search.svg";
 import amazon from "./amazon.svg";
-import sort from "./sort.svg";
 
-const ProductCard = ({title, price, site, img, link="#", badge=null}) => {
+const HOST = "http://robertix.pythonanywhere.com";
+
+const ProductCard = ({ id, title, price, site, img, link="#", badge=null }) => {
     if (title.split(" ").length > 10) {
       title = title.split(" ").slice(0, 11).join(" ");
     }
     return (
-        <div className="product-card">
+        <div key={id} className="product-card">
           {
             badge ? (<span className="badge">{badge}</span>): (<></>)
           }
@@ -53,7 +54,7 @@ const Search = () => {
           orderVal = order_;
         }
         let query = document.getElementById("search-q").value;
-        let {data} = await axios.get(`http://127.0.0.1:5000/search?q=${query}&limit=${30}&page=${pageVal}&order=${orderVal}`);
+        let {data} = await axios.get(`${HOST}/search?q=${query}&limit=${30}&page=${pageVal}&order=${orderVal}`);
         data = data.data;
         setResultTabs(Object.keys(data.products));
         setOne(data.products.amazon);
@@ -63,11 +64,7 @@ const Search = () => {
         setCheapest(data.product_metric.cheapest);
         setDynamicHighest(data.dynamic_metric.highest);
         setDynamicCheapest(data.dynamic_metric.cheapest);
-        setTimeout(
-          (e) => {
-            switchTab("amazon");
-          }, 2500
-        )
+        
     }
 
     const sortResult = () => {
@@ -141,61 +138,70 @@ const Search = () => {
           }
         
         <div className="search-results">
-          <div className={"tab"} id={"amazon"}>
-            <h2>Result for: "{activeTab}"</h2>
-            {
-              one?.length > 0 ? (
-                one.map(
-                  (data) => (
-                    <ProductCard key={data.product_title} title={data.product_title} price={data.product_price} site={"Amazon"} img={amazon} link={`https://www.amazon.com${data.product_url}`}/>
-                  )
+          {
+            resultTabs?.length > 0 ? (
+              <>
+                <div className={"tab"} id={"amazon"}>
+                  <h2>Result for: "{activeTab}"</h2>
+                  {
+                    one?.length > 0 ? (
+                      one.map(
+                        (data) => (
+                          <ProductCard key={one.indexOf(data)} id={one.indexOf(data)} title={data.product_title} price={data.product_price} site={"Amazon"} img={amazon} link={`https://www.amazon.com${data.product_url}`}/>
+                        )
+                      )
+                    ) : (
+                      <i>No Product here!</i>
+                    )
+                  }
+                </div>
+                <div className={"tab"} id={"bulkreef"}>
+                  <h2>Result for: "{activeTab}"</h2>
+                  {
+                    two?.length > 0 ? (
+                      two.map(
+                        (data) => (
+                          <ProductCard key={two.indexOf(data)} id={two.indexOf(data)} title={data.product_title} price={data.product_price} site={"Bulkreef"} img={data.product_preview} />
+                        )
+                      )
+                    ) : (
+                      <i>No Product here!</i>
+                    )
+                  }
+                </div>
+                <div className={"tab"} id={"saltwateraquarium"}>
+                  <h2>Result for: "{activeTab}"</h2>
+                  {
+                    three?.length > 0 ? (
+                      three.map(
+                        (data) => (
+                          <ProductCard key={three.indexOf(data)} id={three.indexOf(data)} title={data.product_title} price={data.product_price} site={"Salt Water Aquarium"} img={data.product_preview} />
+                        )
+                      )
+                    ) : (
+                      <i>No Product here!</i>
+                    )
+                  }
+                </div>
+              
+              {
+                resultTabs?.length > 0 ? (
+                  <div className="pagination">
+                    <b onClick={previous}>{"<"}</b>
+                    <b>{page}</b>
+                    <b onClick={next}>{">"}</b>
+                </div>
+                ) : (
+                  <></>
                 )
-              ) : (
-                <i>No Product here!</i>
-              )
-            }
-          </div>
-          <div className={"tab"} id={"bulkreef"}>
-            <h2>Result for: "{activeTab}"</h2>
-            {
-              two?.length > 0 ? (
-                two.map(
-                  (data) => (
-                    <ProductCard key={data.product_title} title={data.product_title} price={data.product_price} site={"Bulkreef"} img={data.product_preview} />
-                  )
-                )
-              ) : (
-                <i>No Product here!</i>
-              )
-            }
-          </div>
-          <div className={"tab"} id={"saltwateraquarium"}>
-            <h2>Result for: "{activeTab}"</h2>
-            {
-              three?.length > 0 ? (
-                three.map(
-                  (data) => (
-                    <ProductCard key={data.product_title} title={data.product_title} price={data.product_price} site={"Salt Water Aquarium"} img={data.product_preview} />
-                  )
-                )
-              ) : (
-                <i>No Product here!</i>
-              )
-            }
-          </div>
+              }
+            </>
+            ) : (
+              <></>
+            )
+            
+          }
         </div>
-        {
-          resultTabs?.length > 0 ? (
-            <div className="pagination">
-              <b onClick={previous}>{"<"}</b>
-              <b>{page}</b>
-              <b onClick={next}>{">"}</b>
-          </div>
-          ) : (
-            <></>
-          )
-        }
-        
       </div>
     )
 }
