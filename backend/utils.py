@@ -67,51 +67,78 @@ def product_price_order(products):
     
     return highest_product, cheapest_product
     
-def search(query):
+def search(query, limit, page, order="desc"):
+    page = (int(page)-1) * int(limit)
+    limit = int(page) + int(limit)
+
     matches = match_query(query, DYNAMICS_LIST)
-    product_list = list()
+    product_data = {
+        "amazon": [],
+        "bulkreef": [],
+        "saltwateraquarium": []
+    }
 
     for match in matches:
-        product_list.extend(DATA["amazon"].get(match["product_title"], []))
-        product_list.extend(DATA["saltwateraquarium"].get(match["product_title"], []))
-        product_list.extend(DATA["bulkreef"].get(match["product_title"], []))
+        product_data["amazon"] += [{**p, "store": "Amazon"} for p in DATA["amazon"].get(match["product_title"], []) if p["product_price"]]
+        product_data["saltwateraquarium"] += [{**p, "store": "Salt Water Aquarium"} for p in DATA["saltwateraquarium"].get(match["product_title"], []) if p["product_price"]]
+        product_data["bulkreef"] += [{**p, "store": "Bulkreef"} for p in DATA["bulkreef"].get(match["product_title"], []) if p["product_price"]]
     
+    product_list = product_data["amazon"]+product_data["bulkreef"]+product_data["saltwateraquarium"]
     highest, cheapest = product_price_order(products=product_list)
     dynamic_h, dynamic_c = product_price_order(matches)
+
+    product_data["amazon"] = sorted(product_data["amazon"][page:limit], key=lambda x: x["product_price"], reverse=True if order != "asc" else False)
+    product_data["saltwateraquarium"] = sorted(product_data["saltwateraquarium"][page:limit], key=lambda x: x["product_price"], reverse=True if order != "asc" else False)
+    product_data["bulkreef"] = sorted(product_data["bulkreef"][page:limit], key=lambda x: x["product_price"], reverse=True if order != "asc" else False)
+
     response = jsonify({
-        "count": len(product_list), "product_metric": {"highest": highest, "cheapest": cheapest}, 
-        "dynamic_metric": {"highest": dynamic_h, "cheapest": dynamic_c}, "products": product_list
-        })
+        "data": {
+            "count": len(product_list), "product_metric": {"highest": highest, "cheapest": cheapest}, 
+            "dynamic_metric": {"highest": dynamic_h, "cheapest": dynamic_c}, "products": product_data
+        }
+    })
     response.headers["access-control-allow-origin"] = "*"
     return response
     
 
 def get_all_products(limit=40, page=1):
     products_data = list()
-    print(len(DYNAMICS_LIST))
     page = (int(page)-1) * int(limit)
     limit = int(page) + int(limit)
-    print(page, limit)
     for product in DYNAMICS_LIST[page: limit]:
         # matches = match_query(product["product_title"], DYNAMICS_LIST)
         product_info = {
             "product_data": {
-                "amazon": DATA["amazon"].get(product["product_title"], []),
-                "bulkreef": DATA["bulkreef"].get(product["product_title"], []),
-                "saltwateraquarium": DATA["saltwateraquarium"].get(product["product_title"], [])
+                "amazon": [{**p, "store": "Amazon"} for p in DATA["amazon"].get(product["product_title"], []) if p["product_price"]],
+                "saltwateraquarium": [{**p, "store": "Salt Water Aquarium"} for p in DATA["saltwateraquarium"].get(product["product_title"], []) if p["product_price"]],
+                "bulkreef": [{**p, "store": "Bulkreef"} for p in DATA["bulkreef"].get(product["product_title"], []) if p["product_price"]]
             },
             "title": product["product_title"],
             "price": product["product_price"],
             "preview": product["product_preview"]
         }
         
-        total_product_list = product_info["product_data"]["amazon"]+product_info["product_data"]["bulkreef"]+product_info["product_data"]["saltwateraquarium"]
-        highest, cheapest = product_price_order(products=total_product_list)
-        product_info["product_data"].update({
-            "highest": highest,
-            "cheapest": cheapest,
-            "product_name": product
-        })
+        amazon_highest, amazon_cheapest = product_price_order(products=product_info["product_data"]["amazon"])
+        reef_highest, reef_cheapest = product_price_order(products=product_info["product_data"]["bulkreef"])
+        salt_highest, salt_cheapest = product_price_order(products=product_info["product_data"]["saltwateraquarium"])
+        product_info["product_data"]["ranges"] = [
+            {
+                "store": "Amazon",
+                "highest": amazon_highest,
+                "cheapest": amazon_cheapest
+            
+            },
+            {
+                "store": "Bulkreef",
+                "highest": reef_highest,
+                "cheapest": reef_cheapest
+            },
+            {
+               "store": "Salt Water Aquarium",
+                "highest": salt_highest,
+                "cheapest": salt_cheapest
+            }
+        ]
 
         products_data.append(product_info)
     

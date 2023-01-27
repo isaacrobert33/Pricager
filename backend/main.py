@@ -10,7 +10,10 @@ cors = CORS()
 class Search(Resource):
     def get(self):
         query = request.args.get("q")
-        re = search(query)
+        limit = request.args.get("limit")
+        page = request.args.get("page")
+        order = request.args.get("order", "desc")
+        re = search(query, limit, page, order)
         return re
 
 class AllProducts(Resource):
@@ -21,6 +24,6 @@ class AllProducts(Resource):
         return re
 
 api.add_resource(Search, "/search")
-api.add_resource(AllProducts, "/dynamics")
+api.add_resource(AllProducts, "/dynamic")
 
 app.run(debug=True)
