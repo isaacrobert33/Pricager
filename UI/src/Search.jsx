@@ -4,7 +4,7 @@ import axios from "axios";
 import search from "./search.svg";
 import amazon from "./amazon.svg";
 
-const HOST = "http://robertix.pythonanywhere.com";
+const HOST = "https://robertix.pythonanywhere.com";
 
 const ProductCard = ({ id, title, price, site, img, link="#", badge=null }) => {
     if (title.split(" ").length > 10) {

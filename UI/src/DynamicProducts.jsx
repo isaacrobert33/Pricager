@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 import { useState } from "react";
 
 var productFetched = false;
-const HOST = "http://robertix.pythonanywhere.com";
+const HOST = "https://robertix.pythonanywhere.com";
 
 const ProductRow = ({title, price, img, ranges=[]}) => {
   
