@@ -3,6 +3,7 @@ import { useState } from "react";
 import axios from "axios";
 import search from "./search.svg";
 import amazon from "./amazon.svg";
+import Progress from "./Progress";
 
 const HOST = "https://robertix.pythonanywhere.com";
 
@@ -24,15 +25,6 @@ const ProductCard = ({ id, title, price, site, img, link="#", badge=null }) => {
         </div>
     )
 }
-const Loading = () => {
-  return (
-    <div className="spinner-container">
-      <div className="loading-spinner">
-      </div>
-    </div>
-  )
-}
-var searched = false;
 
 const Search = () => {
     // const [query, setQuery] = useState(undefined);
@@ -47,7 +39,7 @@ const Search = () => {
     const [page, setPage] = useState(1);
     const [activeTab, setActive] = useState("");
     const [order, setOrder] = useState("desc");
-    const [isLoading, setLoading] = useState(true);
+    const [isLoading, setLoading] = useState(false);
 
     useEffect((e) => {
       document.getElementById("search-tab").style.textDecoration = "underline";
@@ -56,7 +48,6 @@ const Search = () => {
 
     async function fetchResult(pageNo=null, order_=null) {
         setLoading(true);
-        searched = true;
         let pageVal = page;
         let orderVal = order;
         if (pageNo) {
@@ -71,7 +62,6 @@ const Search = () => {
             response => {
               setLoading(false);
               const data = response.data.data;
-              console.log(data);
               setResultTabs(Object.keys(data.products));
               setOne(data.products.amazon);
               setTwo(data.products.bulkreef);
@@ -94,7 +84,6 @@ const Search = () => {
     const switchTab = (tab_name) => {
       let i;
       for (i=0; i<document.getElementsByClassName("tab").length; i++) {
-        console.log(resultTabs[i]);
         document.getElementsByClassName("tab")[i].style.display = "none";
         document.getElementById(`${resultTabs[i]}-btn`).style.color = "#002e25";
         document.getElementById(`${resultTabs[i]}-btn`).style.backgroundColor = "azure";
@@ -112,7 +101,6 @@ const Search = () => {
     }
 
     const previous = () => {
-      console.log(page);
       if (page > 1) {
         setPage(page - 1);
       }
@@ -133,7 +121,7 @@ const Search = () => {
         </div>
         {
           isLoading ? (
-              searched ? <Loading/> : <></>
+              <Progress/>
             ) : (
             <>
             <div className="search-tabs">
@@ -153,10 +141,10 @@ const Search = () => {
               {
                 highestProduct ? (
                   <div className="special-tab">
-                    <ProductCard key={highestProduct.product_preview} title={highestProduct.product_title} price={highestProduct.product_price} img={highestProduct.product_preview} badge={"Highest Price"} site={highestProduct.store}/>
-                    <ProductCard key={cheapestProduct.product_preview} title={cheapestProduct.product_title} price={cheapestProduct.product_price} img={cheapestProduct.product_preview} badge={"Cheapest Price"} site={cheapestProduct.store}/>
-                    <ProductCard key={dynamicHighest.product_preview} title={dynamicHighest.product_title} price={dynamicHighest.product_price} img={dynamicHighest.product_preview} badge={"Highest Price"} site={"Dynamic"}/>
-                    <ProductCard key={dynamicCheapest.product_preview} title={dynamicCheapest.product_title} price={dynamicCheapest.product_price} img={dynamicCheapest.product_preview} badge={"Cheapest Price"} site={"Dynamic"}/>
+                    <ProductCard key={"order-1"} id={"order-1"} title={highestProduct.product_title} price={highestProduct.product_price} img={highestProduct.product_preview} badge={"Highest Price"} site={highestProduct.store}/>
+                    <ProductCard key={"order-2"} id={"order-2"} title={cheapestProduct.product_title} price={cheapestProduct.product_price} img={cheapestProduct.product_preview} badge={"Cheapest Price"} site={cheapestProduct.store}/>
+                    <ProductCard key={"order-3"} id={"order-3"} title={dynamicHighest.product_title} price={dynamicHighest.product_price} img={dynamicHighest.product_preview} badge={"Highest Price"} site={"Dynamic"}/>
+                    <ProductCard key={"order-4"} id={"order-4"} title={dynamicCheapest.product_title} price={dynamicCheapest.product_price} img={dynamicCheapest.product_preview} badge={"Cheapest Price"} site={"Dynamic"}/>
                   </div>
                 ) : (
                   <></>

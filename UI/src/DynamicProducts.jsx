@@ -1,14 +1,15 @@
 import axios from "axios";
 import React, { useEffect } from "react";
+import Progress from "./Progress";
 import { useState } from "react";
 
 // var productFetched = false;
 const HOST = "https://robertix.pythonanywhere.com";
 
-const ProductRow = ({title, price, img, ranges=[]}) => {
+const ProductRow = ({id, title, price, img, ranges=[]}) => {
   
   return (
-    <div className="product-row">
+    <div key={id} className="product-row">
       <span className="product-badge">{"Dynamic"}</span>
       <div className="product-preview">
         <img width={"128px"} height={"128px"} src={img} alt={price}></img>
@@ -33,20 +34,30 @@ const ProductRow = ({title, price, img, ranges=[]}) => {
 const DynamicProducts = () => {
     const [products, setProducts] = useState([]);
     const [page, setPage] = useState(1);
+    const [isLoading, setLoading] = useState(false);
 
     const fetchProducts = async (pageNo = null) => {
+      setLoading(true);
       let pageVal = page;
-      console.log("Fetching...")
       if (pageNo) {
         pageVal = pageNo;
       }
 
-      let {data} = await axios.get(`${HOST}/dynamic?limit=${30}&page=${pageVal}`);
-      setProducts(data.data);
+      await axios.get(`${HOST}/dynamic?limit=${30}&page=${pageVal}`)
+        .then(
+          response => {
+            setProducts(response.data.data);
+            setLoading(false);
+          }
+        )
+        .catch(
+          err => {
+            alert("Error fetching products, please check your connection!");
+          }
+        )
     }
 
     const previous = () => {
-      console.log(page);
       if (page > 1) {
         setPage(page - 1);
       }
@@ -70,14 +81,18 @@ const DynamicProducts = () => {
     })
     return (
       <div className='products'>
-        {/* <h3>Dynamic Products</h3> */}
+        {
+          isLoading ? (
+            <Progress></Progress>
+          ) : (<></>)
+        }
         {
           products?.length > 0 ? (
             <div className="products-list">
               {
                 products.map(
                   (data) => (
-                    <ProductRow title={data.title} price={data.price} img={data.preview} ranges={data.product_data.ranges} />
+                    <ProductRow key={`product-${products.indexOf(data)}`} id={`product-${products.indexOf(data)}`} title={data.title} price={data.price} img={data.preview} ranges={data.product_data.ranges} />
                   )
                 )
               }
