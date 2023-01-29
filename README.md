@@ -14,4 +14,4 @@ npm install UI/
 cd UI
 npm start
 ```
-
+The Price Manager tool is hosted on [Price-Manager](https://price-manager.vercel.app)
